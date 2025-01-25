@@ -10,3 +10,5 @@ router.post(
     validateRequest(createUserValidationSchema),
     UserControllers.createUser
 )
+
+export const UserRoutes = router;
