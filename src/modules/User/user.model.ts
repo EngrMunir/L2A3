@@ -6,9 +6,8 @@ import config from '../../app/config';
 const userSchema = new Schema<TUser>(
   {
     name: {
-      firstName: { type: String, required: true },
-      middleName: { type: String, required: false },
-      lastName: { type: String, required: true },
+      type: String, 
+      required: true 
     },
     email: {
       type: String,

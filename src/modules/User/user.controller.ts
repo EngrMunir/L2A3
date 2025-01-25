@@ -8,16 +8,22 @@ const createUser = catchAsync(async(req, res)=>{
 
     console.log(req.body);
     const result = await UserServices.createUserIntoDB(req.body);
-    console.log(result)
+
+    const filteredData = {
+        _id: result._id,
+        name: result.name,
+        email: result.email,
+      };
+    // console.log(result)
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success:true,
-        message:'User created Successfully',
-        data:result
+        message:'User registered Successfully',
+        data:filteredData
     })
 })
 
 export const UserControllers ={
-    createUser
+    createUser,
 }
