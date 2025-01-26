@@ -9,6 +9,7 @@ export const createBlogValidationSchema = z.object({
     }).min(1, { message: "Content must not be empty" }),
   
     author: z.string(),
-    isPublished: z.boolean()
+    isPublished: z.boolean(),
+    isDeleted:z.boolean(),
   })
 })

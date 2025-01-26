@@ -9,7 +9,6 @@ const createBlogIntoDB =async(payload:Partial<TBlog>)=>{
     
     const newBlog = await Blog.create(payload);
 
-
     if(!newBlog){
         throw new AppError(httpStatus.BAD_REQUEST,'Failed to create blog');
     }
@@ -17,7 +16,20 @@ const createBlogIntoDB =async(payload:Partial<TBlog>)=>{
     return newBlog;
 }
 
+const deleteBlogFromDB = async(id:string)=>{
+    const deletedBlog = await Blog.findByIdAndUpdate(
+        id,
+        { isDeleted: true },
+        {new:true}
+    )
+    if (!deletedBlog) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
+      }
+      return deletedBlog;
+}
+
 
 export const BlogServices ={
-    createBlogIntoDB
+    createBlogIntoDB,
+    deleteBlogFromDB
 }
