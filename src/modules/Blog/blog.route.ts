@@ -5,10 +5,18 @@ import { BlogControllers } from './blog.controller';
 
 const router = express.Router();
 
+router.get(
+    '/',
+    BlogControllers.getAllBlog
+),
 router.post(
-    '/blogs',
+    '/',
     validateRequest(createBlogValidationSchema),
     BlogControllers.createBlog
+),
+router.delete(
+    '/:id',
+    BlogControllers.deleteBlog,
 )
 
 export const BlogRoutes = router;

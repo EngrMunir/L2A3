@@ -16,6 +16,12 @@ const createBlogIntoDB =async(payload:Partial<TBlog>)=>{
     return newBlog;
 }
 
+const getAllBlogFromDB = async ()=>{
+    const result = await Blog.find();
+    
+    return result;
+}
+
 const deleteBlogFromDB = async(id:string)=>{
     const deletedBlog = await Blog.findByIdAndUpdate(
         id,
@@ -31,5 +37,6 @@ const deleteBlogFromDB = async(id:string)=>{
 
 export const BlogServices ={
     createBlogIntoDB,
+    getAllBlogFromDB,
     deleteBlogFromDB
 }
