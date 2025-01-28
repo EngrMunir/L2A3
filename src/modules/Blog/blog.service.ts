@@ -1,42 +1,63 @@
-import AppError from "../../app/errors/AppError";
-import { TBlog } from "./blog.interface";
-import { Blog } from "./blog.model";
+import QueryBuilder from '../../app/builder/QueryBuilder';
+import AppError from '../../app/errors/AppError';
+import { BlogSearchableFields } from './blog.constant';
+import { TBlog } from './blog.interface';
+import { Blog } from './blog.model';
 import httpStatus from 'http-status';
 
-const createBlogIntoDB =async(payload:Partial<TBlog>)=>{
+const createBlogIntoDB = async (payload: Partial<TBlog>) => {
+  const newBlog = await Blog.create(payload);
 
-    console.log(payload);
-    
-    const newBlog = await Blog.create(payload);
+  if (!newBlog) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create blog');
+  }
 
-    if(!newBlog){
-        throw new AppError(httpStatus.BAD_REQUEST,'Failed to create blog');
-    }
+  return newBlog;
+};
 
-    return newBlog;
-}
+const getAllBlogFromDB = async (query: Record<string, unknown>) => {
+  const blogQuery = new QueryBuilder(Blog.find().populate('author'), query)
+    .search(BlogSearchableFields)
+    .filter()
+    .sortBy();
 
-const getAllBlogFromDB = async ()=>{
-    const result = await Blog.find();
-    
-    return result;
-}
+  const result = await blogQuery.modelQuery;
+  return result;
+};
 
-const deleteBlogFromDB = async(id:string)=>{
-    const deletedBlog = await Blog.findByIdAndUpdate(
-        id,
-        { isDeleted: true },
-        {new:true}
-    )
-    if (!deletedBlog) {
-        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
-      }
-      return deletedBlog;
-}
+const getSingleBlogFromDB = async (id: string) => {
+  const result = await Blog.findById(id);
+  return result;
+};
 
+const updateBlogIntoDB = async (id: string, payload:Partial<TBlog>) => {
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    {_id: id },
+    payload,
+    { new: true },
+  );
+  if (!updatedBlog) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update blog');
+  }
+  return updatedBlog;
+};
 
-export const BlogServices ={
-    createBlogIntoDB,
-    getAllBlogFromDB,
-    deleteBlogFromDB
-}
+const deleteBlogFromDB = async (id: string) => {
+  const deletedBlog = await Blog.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    { new: true },
+  );
+  if (!deletedBlog) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete Blog');
+  }
+  return deletedBlog;
+};
+
+export const BlogServices = {
+  createBlogIntoDB,
+  getAllBlogFromDB,
+  getSingleBlogFromDB,
+  updateBlogIntoDB,
+  deleteBlogFromDB,
+};
