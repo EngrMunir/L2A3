@@ -53,8 +53,8 @@ A backend system for a blogging platform supporting user authentication, role-ba
    ```
 
 4. Start the server:
-   ```bash
-   npm start
+   ```
+   npm run dev:start
    ```
 
 
